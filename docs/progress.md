@@ -2,6 +2,8 @@
 
 Updated: 8 October 2026 (Asia/Kuala_Lumpur)
 
+Latest update: added a Makefile for repeatable local setup, development, and combined lint/type/build verification. 'make test' intentionally aliases the available checks rather than introducing an automated test suite.
+
 ## Provisional decisions
 
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.

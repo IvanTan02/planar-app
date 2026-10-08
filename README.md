@@ -10,11 +10,20 @@ Requirements: Node.js 20.19+, npm, and a Supabase project.
 2. Copy '.env.example' to '.env.local' and add the project URL and anonymous key.
 3. In Supabase, apply 'supabase/migrations/202610080001_initial_schema.sql'.
 4. Create the private owner in Authentication → Users. Public sign-up is intentionally absent. The database trigger creates the profile and initial board.
-5. Run 'npm run dev' and open http://localhost:3000.
+5. Run 'make dev' and open http://localhost:3000.
 
 Without environment variables, Planar deliberately shows a setup screen. It does not simulate successful persistence.
 
 ## Commands
+
+- 'make help' — list all local commands
+- 'make install' — install pinned dependencies
+- 'make env' — create '.env.local' without overwriting an existing file
+- 'make dev' — start the development server
+- 'make test' or 'make check' — run lint, type-check, and production-build verification
+- 'make start' — run a previously built production server
+
+The Make targets wrap the corresponding npm scripts. There is intentionally no automated test suite in this initial build; 'make test' runs every available static and build check.
 
 - 'npm run dev' — development server
 - 'npm run typecheck' — TypeScript verification
