@@ -1,0 +1,2 @@
+-- Create the private owner through Supabase Authentication, not SQL.
+-- The provision_owner trigger creates their profile and initial board.

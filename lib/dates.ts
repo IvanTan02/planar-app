@@ -1,0 +1,3 @@
+export function localDate(offset=0){const d=new Date();d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"2-digit",day:"2-digit"}).format(d)}
+export function prettyDate(date:string){return new Intl.DateTimeFormat("en-MY",{weekday:"long",day:"numeric",month:"long",timeZone:"Asia/Kuala_Lumpur"}).format(new Date(date+"T12:00:00+08:00"))}
+export function weekStart(date=new Date()){const d=new Date(date);const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kuala_Lumpur",year:"numeric",month:"2-digit",day:"2-digit"}).format(d)}

@@ -1,0 +1,4 @@
+import type{ReactNode}from"react";
+export function Empty({icon,title,children}: {icon:ReactNode;title:string;children:ReactNode}){return <div className="empty"><span>{icon}</span><h3>{title}</h3><p>{children}</p></div>}
+export function Stat({label,value,detail}:{label:string;value:string|number;detail?:string}){return <div className="stat"><span>{label}</span><strong>{value}</strong>{detail&&<small>{detail}</small>}</div>}
+export function Modal({title,children,onClose}:{title:string;children:ReactNode;onClose:()=>void}){return <div className="backdrop" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><section className="modal" role="dialog" aria-modal="true" aria-label={title}><header><h2>{title}</h2><button className="icon-button" onClick={onClose} aria-label="Close">×</button></header>{children}</section></div>}
