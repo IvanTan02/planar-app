@@ -1,4 +1,29 @@
-"use client";
-import { FormEvent, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-export function LoginForm() { const [email,setEmail]=useState(""); const [password,setPassword]=useState(""); const [error,setError]=useState(""); const [busy,setBusy]=useState(false); async function submit(e:FormEvent){e.preventDefault();setBusy(true);setError("");const {error}=await createClient().auth.signInWithPassword({email,password});if(error){setError(error.message);setBusy(false)}else location.assign("/")} return <form className="auth-card" onSubmit={submit}><h2>Private sign in</h2><p>Access is limited to accounts provisioned by the owner.</p><label>Email<input type="email" autoComplete="email" required value={email} onChange={e=>setEmail(e.target.value)} /></label><label>Password<input type="password" autoComplete="current-password" required value={password} onChange={e=>setPassword(e.target.value)} /></label>{error&&<p className="error" role="alert">{error}</p>}<button className="button" disabled={busy}>{busy?"Signing in…":"Sign in"}</button></form> }
+import { login } from "@/app/login/actions";
+
+export function LoginForm({ error }: { error?: string }) {
+  return (
+    <form className="auth-card" action={login}>
+      <h2>Private sign in</h2>
+      <p>Access is limited to accounts provisioned by the owner.</p>
+      <label>
+        Email
+        <input name="email" type="email" autoComplete="email" required />
+      </label>
+      <label>
+        Password
+        <input
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+        />
+      </label>
+      {error && (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      )}
+      <button className="button">Sign in</button>
+    </form>
+  );
+}
