@@ -7,7 +7,7 @@ A private, responsive personal planning app that connects goals and boards to an
 Requirements: Node.js 20.19+, npm, and a Supabase project.
 
 1. Install packages with 'npm install'.
-2. Copy '.env.example' to '.env.local' and add the project URL and anonymous key.
+2. Copy '.env.example' to '.env.local' and add the project URL and publishable key ('sb_publishable_...') from Supabase's Connect dialog.
 3. In Supabase, apply 'supabase/migrations/202610080001_initial_schema.sql'.
 4. Create the private owner in Authentication → Users. Public sign-up is intentionally absent. The database trigger creates the profile and initial board.
 5. Run 'make dev' and open http://localhost:3000.
@@ -32,7 +32,7 @@ The Make targets wrap the corresponding npm scripts. There is intentionally no a
 
 ## Data and security
 
-All product tables use row-level security tied to the authenticated user's ID. The browser receives only the Supabase anonymous key. Ordered daily-plan replacement is performed by one version-aware database function to prevent partial or silently stale saves.
+All product tables use row-level security tied to the authenticated user's ID. The browser receives only the Supabase publishable key. Planar does not use a secret or legacy 'service_role' key. Ordered daily-plan replacement is performed by one version-aware database function to prevent partial or silently stale saves.
 
 The PWA is online-first. Its service worker caches only the manifest and icon; authenticated pages and private responses are never put in a shared cache. Offline edits are not queued.
 
