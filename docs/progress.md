@@ -10,6 +10,8 @@ Authentication fix: added the required Next.js 16 Supabase session proxy, upgrad
 
 Password sign-in now runs as a Next.js Server Action, matching Supabase's current SSR example. The authentication response writes session cookies before issuing the redirect, eliminating the client-side cookie/navigation race that caused a repeated '/login' redirect.
 
+Authentication diagnostics now distinguish rejected credentials, a missing Supabase session, a missing auth cookie, and a failed server-side token verification. The home route uses 'getClaims()' for authorization, matching current Supabase SSR guidance.
+
 ## Provisional decisions
 
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.
