@@ -1,4 +1,6 @@
 create extension if not exists pgcrypto;
+create schema if not exists private;
+revoke all on schema private from public, anon, authenticated;
 create type task_status as enum ('todo','in_progress','done');
 create type task_complexity as enum ('small','medium','large');
 create type task_priority as enum ('low','normal','high');
@@ -25,7 +27,7 @@ create index task_activity_owner_time on task_activity(owner_id,occurred_at desc
 create index daily_plans_owner_date on daily_plans(owner_id,plan_date);
 create index goals_owner_period on goals(owner_id,start_date,end_date) where status='active';
 
-create function touch_record() returns trigger language plpgsql as $$ begin new.updated_at=now(); if tg_table_name in ('tasks','daily_plans') then new.version=old.version+1; end if; return new; end $$;
+create function touch_record() returns trigger language plpgsql set search_path='' as $$ begin new.updated_at=now(); if tg_table_name in ('tasks','daily_plans') then new.version=old.version+1; end if; return new; end $$;
 create trigger touch_profiles before update on profiles for each row execute function touch_record();
 create trigger touch_folders before update on folders for each row execute function touch_record();
 create trigger touch_boards before update on boards for each row execute function touch_record();
@@ -33,26 +35,39 @@ create trigger touch_epics before update on epics for each row execute function 
 create trigger touch_tasks before update on tasks for each row execute function touch_record();
 create trigger touch_goals before update on goals for each row execute function touch_record();
 create trigger touch_plans before update on daily_plans for each row execute function touch_record();
-create function provision_owner() returns trigger security definer set search_path=public language plpgsql as $$ begin insert into profiles(id) values(new.id); insert into boards(owner_id,name) values(new.id,'My Board'); return new; end $$;
-create trigger provision_owner_after_signup after insert on auth.users for each row execute function provision_owner();
-create function record_task_status() returns trigger security definer set search_path=public language plpgsql as $$ begin if tg_op='INSERT' then insert into task_activity(owner_id,task_id,event) values(new.owner_id,new.id,'created'); elsif old.status is distinct from new.status then insert into task_activity(owner_id,task_id,event) values(new.owner_id,new.id,case when new.status='done' then 'completed' else 'reopened' end); end if; return new; end $$;
+create function private.provision_owner() returns trigger security definer set search_path='' language plpgsql as $$ begin insert into public.profiles(id) values(new.id) on conflict(id) do nothing; insert into public.boards(owner_id,name) select new.id,'My Board' where not exists(select 1 from public.boards where owner_id=new.id); return new; end $$;
+revoke all on function private.provision_owner() from public, anon, authenticated;
+create trigger provision_owner_after_signup after insert on auth.users for each row execute function private.provision_owner();
+insert into profiles(id) select id from auth.users on conflict(id) do nothing;
+insert into boards(owner_id,name) select p.id,'My Board' from profiles p where not exists(select 1 from boards b where b.owner_id=p.id);
+create function record_task_status() returns trigger set search_path='' language plpgsql as $$ begin if tg_op='INSERT' then insert into public.task_activity(owner_id,task_id,event) values(new.owner_id,new.id,'created'); elsif old.status is distinct from new.status then insert into public.task_activity(owner_id,task_id,event) values(new.owner_id,new.id,case when new.status='done' then 'completed' else 'reopened' end); end if; return new; end $$;
 create trigger record_task_status_after after insert or update on tasks for each row execute function record_task_status();
-create function reject_block_cycle() returns trigger security definer set search_path=public language plpgsql as $$ begin if new.kind='blocked_by' and exists(with recursive chain(id) as (select target_task_id from task_relationships where kind='blocked_by' and source_task_id=new.target_task_id union select r.target_task_id from task_relationships r join chain c on r.source_task_id=c.id where r.kind='blocked_by') select 1 from chain where id=new.source_task_id) then raise exception 'This dependency would create a cycle'; end if; return new; end $$;
+create function reject_block_cycle() returns trigger set search_path='' language plpgsql as $$ begin if new.kind='blocked_by' and exists(with recursive chain(id) as (select target_task_id from public.task_relationships where kind='blocked_by' and source_task_id=new.target_task_id union select r.target_task_id from public.task_relationships r join chain c on r.source_task_id=c.id where r.kind='blocked_by') select 1 from chain where id=new.source_task_id) then raise exception 'This dependency would create a cycle'; end if; return new; end $$;
 create trigger reject_block_cycle_before before insert or update on task_relationships for each row execute function reject_block_cycle();
+revoke all on function touch_record() from public, anon, authenticated;
+revoke all on function record_task_status() from public, anon, authenticated;
+revoke all on function reject_block_cycle() from public, anon, authenticated;
 
 alter table profiles enable row level security; alter table folders enable row level security; alter table boards enable row level security; alter table epics enable row level security; alter table tasks enable row level security; alter table task_relationships enable row level security; alter table goals enable row level security; alter table goal_tasks enable row level security; alter table goal_epics enable row level security; alter table daily_plans enable row level security; alter table daily_plan_items enable row level security; alter table task_activity enable row level security;
-do $$ declare t text; begin foreach t in array array['profiles','folders','boards','epics','tasks','task_relationships','goals','goal_tasks','goal_epics','daily_plans','daily_plan_items','task_activity'] loop execute format('create policy owner_access on %I for all using (owner_id = auth.uid()) with check (owner_id = auth.uid())',t); end loop; end $$;
+create policy owner_access on profiles for all to authenticated using(id=(select auth.uid())) with check(id=(select auth.uid()));
+do $$ declare t text; begin foreach t in array array['folders','boards','epics','tasks','task_relationships','goals','goal_tasks','goal_epics','daily_plans','daily_plan_items','task_activity'] loop execute format('create policy owner_access on %I for all to authenticated using (owner_id = (select auth.uid())) with check (owner_id = (select auth.uid()))',t); end loop; end $$;
+grant usage on schema public to authenticated;
+grant select,insert,update,delete on all tables in schema public to authenticated;
+revoke all on all tables in schema public from anon;
 
-create function save_daily_plan(p_date date,p_focus text,p_task_ids uuid[],p_expected_version integer default null) returns daily_plans security invoker language plpgsql as $$
-declare p daily_plans; t tasks; i integer;
+create function save_daily_plan(p_date date,p_focus text,p_task_ids uuid[],p_expected_version integer default null) returns public.daily_plans security invoker set search_path='' language plpgsql as $$
+declare p public.daily_plans; t public.tasks; i integer;
 begin
- insert into daily_plans(owner_id,plan_date,focus) values(auth.uid(),p_date,coalesce(p_focus,'')) on conflict(owner_id,plan_date) do update set focus=excluded.focus where p_expected_version is null or daily_plans.version=p_expected_version returning * into p;
+ insert into public.daily_plans(owner_id,plan_date,focus) values(auth.uid(),p_date,coalesce(p_focus,'')) on conflict(owner_id,plan_date) do update set focus=excluded.focus where p_expected_version is null or daily_plans.version=p_expected_version returning * into p;
  if p.id is null then raise exception 'Plan changed elsewhere. Refresh before saving again.'; end if;
  if cardinality(p_task_ids)<>(select count(distinct x) from unnest(p_task_ids) x) then raise exception 'A task can appear only once per plan'; end if;
- delete from daily_plan_items where plan_id=p.id;
+ delete from public.daily_plan_items where plan_id=p.id;
  for i in 1..coalesce(cardinality(p_task_ids),0) loop
-  select * into t from tasks where id=p_task_ids[i] and owner_id=auth.uid() and trashed_at is null;
+  select * into t from public.tasks where id=p_task_ids[i] and owner_id=auth.uid() and trashed_at is null;
   if t.id is null then raise exception 'A selected task is unavailable'; end if;
-  insert into daily_plan_items(owner_id,plan_id,task_id,position,title_snapshot) values(auth.uid(),p.id,t.id,i-1,t.title);
+  insert into public.daily_plan_items(owner_id,plan_id,task_id,position,title_snapshot) values(auth.uid(),p.id,t.id,i-1,t.title);
  end loop; return p;
 end $$;
+revoke all on function save_daily_plan(date,text,uuid[],integer) from public, anon;
+grant execute on function save_daily_plan(date,text,uuid[],integer) to authenticated;
+notify pgrst, 'reload schema';

@@ -14,6 +14,8 @@ Authentication diagnostics now distinguish rejected credentials, a missing Supab
 
 Local TLS fix: Node's direct Supabase request failed with 'SELF_SIGNED_CERT_IN_CHAIN' while DNS worked. A request using a CA bundle exported from the trusted macOS System keychain returned HTTP 200. The Makefile now prepares and exports this ignored bundle for Node commands; TLS verification remains enabled.
 
+Database readiness audit: corrected the initial profile RLS policy, restricted all policies to authenticated users, moved the owner-provisioning definer into a private schema, revoked direct API execution of trigger-only functions, added explicit Data API grants, and added an idempotent profile/default-board backfill for Auth users created before the migration.
+
 ## Provisional decisions
 
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.
