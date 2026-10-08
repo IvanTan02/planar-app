@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { PlanarApp } from "@/components/planar-app";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) return <Setup />;
   const supabase = await createClient();

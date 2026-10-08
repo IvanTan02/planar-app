@@ -6,6 +6,8 @@ Latest update: added a Makefile for repeatable local setup, development, and com
 
 Supabase key update: the client configuration now uses the current publishable key ('sb_publishable_...') rather than the legacy JWT-based 'anon' key. No secret key is required or accepted by the browser configuration.
 
+Authentication fix: added the required Next.js 16 Supabase session proxy, upgraded '@supabase/ssr' to 0.12.7, propagated refreshed cookies/cache headers, and forced the authenticated home route to render dynamically. This resolves successful browser sign-ins being treated as unauthenticated on the following server request.
+
 ## Provisional decisions
 
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.
