@@ -19,11 +19,14 @@ Without environment variables, Planar deliberately shows a setup screen. It does
 - 'make help' — list all local commands
 - 'make install' — install pinned dependencies
 - 'make env' — create '.env.local' without overwriting an existing file
+- 'make ca' — prepare Node's CA bundle from the macOS system keychain
 - 'make dev' — start the development server
 - 'make test' or 'make check' — run lint, type-check, and production-build verification
 - 'make start' — run a previously built production server
 
 The Make targets wrap the corresponding npm scripts. There is intentionally no automated test suite in this initial build; 'make test' runs every available static and build check.
+
+On macOS, Make exports the public certificates trusted by the System keychain into the ignored '.local/system-ca.pem' file and passes that bundle to Node. This keeps Supabase HTTPS working on managed networks that inspect TLS. Do not work around certificate errors with 'NODE_TLS_REJECT_UNAUTHORIZED=0'.
 
 - 'npm run dev' — development server
 - 'npm run typecheck' — TypeScript verification
