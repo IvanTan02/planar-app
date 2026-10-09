@@ -11,3 +11,9 @@ html{background:var(--bg)}body{background:radial-gradient(circle at 75% -10%,col
 /* Feedback round two: stable sidebar, overlay notifications, and dashboard summary */
 .sidebar{min-width:0;overflow:hidden}.board-tree{min-width:0;overflow-x:hidden;overflow-y:auto}.board-tree section,.board-link{min-width:0}.board-link{overflow:hidden}.board-link .board-dot{flex:0 0 auto}.board-link span:not(.board-dot){min-width:0}.toast{z-index:100}.toast-error{top:18px;right:50%;bottom:auto;width:min(720px,calc(100vw - 32px));transform:translateX(50%);justify-content:space-between;background:#ffe3e7;color:#8a1730;border:1px solid color-mix(in srgb,var(--danger) 28%,transparent);box-shadow:var(--shadow-lg)}.toast-error button{border:0;background:none;color:inherit;font-weight:700}.toast-success{bottom:22px}.goal-actions{justify-content:flex-start!important;gap:18px}.outstanding-card{grid-column:1/-1}.outstanding-card>.section-head{margin-top:0}.outstanding-card .empty{padding:28px 20px}
 @media(max-width:600px){.toast-error{top:10px}}
+
+/* Checkbox rows must not inherit text-field dimensions or stacked form labels. */
+.task-detail .picker-list label,.dialog-form .picker-list label{flex-direction:row;align-items:center;gap:12px;font-weight:400}
+.picker-list input[type=checkbox]{appearance:auto;flex:0 0 18px;width:18px;height:18px;min-height:18px;margin:0;padding:0;accent-color:var(--blue);border-radius:4px;box-shadow:none}
+.picker-list label>span{min-width:0;flex:1;gap:3px}
+.picker-list label strong{overflow-wrap:anywhere}

@@ -13,6 +13,8 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
+- Corrected goal-link checkbox sizing and row layout: checkboxes use compact 18px controls beside goal titles instead of inheriting full-width text-field styles.
+
 - Goal editing now repairs inconsistent preset dates when opening an existing goal, anchored to its original start date. Calendar calculations avoid browser-timezone shifts and clamp month anniversaries to valid month-end dates. Custom dates remain as entered.
 
 - Corrected goal editing so preset horizons update the displayed and persisted `start_date` and `end_date` fields, instead of adding unused `start`/`end` properties.
