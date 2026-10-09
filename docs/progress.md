@@ -13,6 +13,8 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
+- Simplified goal-link copy and due-date sublabels, with Saving/Saved feedback. Task saves now update only edited fields and close without a redundant database write after goal-only changes. Update failures preserve the database message and detect inaccessible/missing rows; authenticated edited-task saves still need browser verification.
+
 - Corrected goal-link checkbox sizing and row layout: checkboxes use compact 18px controls beside goal titles instead of inheriting full-width text-field styles.
 
 - Goal editing now repairs inconsistent preset dates when opening an existing goal, anchored to its original start date. Calendar calculations avoid browser-timezone shifts and clamp month anniversaries to valid month-end dates. Custom dates remain as entered.

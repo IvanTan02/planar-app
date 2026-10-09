@@ -17,3 +17,4 @@ html{background:var(--bg)}body{background:radial-gradient(circle at 75% -10%,col
 .picker-list input[type=checkbox]{appearance:auto;flex:0 0 18px;width:18px;height:18px;min-height:18px;margin:0;padding:0;accent-color:var(--blue);border-radius:4px;box-shadow:none}
 .picker-list label>span{min-width:0;flex:1;gap:3px}
 .picker-list label strong{overflow-wrap:anywhere}
+.goal-links .section-head{margin:0}.goal-links h3{margin:0}.goal-links .section-head small{color:var(--muted);font-size:12px}.goal-links .picker-list label strong{font-size:14px;font-weight:600}.goal-links .picker-list label small{font-size:12px;font-weight:400;color:var(--muted)}
