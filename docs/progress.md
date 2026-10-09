@@ -39,6 +39,8 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 
 ## Provisional decisions
 
+- Goal linking implemented through the existing `goal_tasks` and `goal_epics` tables; no migration required. Tasks and epics may support multiple goals. Links save immediately, errors use the global toast, and archived goals cannot gain new links from the picker. Goal details show deduplicated supporting tasks, including those assigned to linked epics; archived/trashed work is hidden. Goal achievement remains explicit.
+
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.
 - Private email/password sign-in with owner provisioning; no public registration UI.
 - Direct authenticated Supabase client mutations guarded by RLS. No service-role credential exists in the app.
@@ -75,7 +77,7 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 ### 5. Goals and overview — substantially complete
 
 - Editable period goals, dashboard focus/first task/counts, an outstanding-work summary, task search filters, board archive review, restorable task/board Trash, and activity-based weekly completions.
-- Remaining UI limitation: task/epic goal-link management and board/folder rename/reorder controls are not yet exposed. The blocked dashboard count is a review prompt rather than a calculated count.
+- Task/epic goal-link management is available. Remaining UI limitation: board/folder rename/reorder controls and dependency review are not yet exposed.
 
 ### 6. PWA and handoff — complete
 
