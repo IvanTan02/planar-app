@@ -1,6 +1,15 @@
 # Implementation progress
 
-Updated: 8 October 2026 (Asia/Kuala_Lumpur)
+Updated: 9 October 2026 (Asia/Kuala_Lumpur)
+
+Product feedback round one implemented:
+
+- Boards, including the generated default board, can move to recoverable Trash once another active board exists.
+- Epic groups now open a management workspace for editing, creating/assigning/removing tasks, atomic cross-board moves, and trashing with automatic ungrouping.
+- Task "complexity" is renamed to "effort"; acceptance criteria is removed in favor of a larger notes field.
+- Goal creation now provides end-of-week, end-of-month, 3-month, 6-month, 1-year, and custom-date horizons.
+- UI polish pass improved hierarchy, spacing, controls, focus states, cards, modals, and responsive presentation.
+- Follow-up migration '20261009090008_product_feedback_round_one.sql' records the live schema changes and atomic epic functions.
 
 Latest update: added a Makefile for repeatable local setup, development, and combined lint/type/build verification. 'make test' intentionally aliases the available checks rather than introducing an automated test suite.
 
@@ -21,7 +30,7 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 - Adopted Next.js App Router, TypeScript, Supabase Auth/Postgres, and custom CSS. The current Next.js 16.4.0 release is pinned after Next 15 failed its production compile under the available Node runtime.
 - Private email/password sign-in with owner provisioning; no public registration UI.
 - Direct authenticated Supabase client mutations guarded by RLS. No service-role credential exists in the app.
-- Fixed Todo / In progress / Done states, one folder level, one subtask level, and the recommended priority/complexity defaults.
+- Fixed Todo / In progress / Done states, one folder level, one subtask level, and optional priority/effort fields.
 - Native move-up/down controls are the accessible ordering mechanism. Pointer drag-and-drop is not included in this initial handoff.
 - Online-first PWA with only public icon/manifest caching; no offline write queue.
 
@@ -45,11 +54,11 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 - Cross-board task picker, focus statement, explicit unfinished-work carry-forward, removal without task deletion, and accessible ordering.
 - Visible saving/error state; focus and minute checks re-evaluate date rollover. Historical plan rows and title snapshots remain stored.
 
-### 4. Optional structure — substantially complete
+### 4. Optional structure — complete
 
-- Optional complexity, priority, dates, acceptance criteria, subtasks, standalone tasks, epic grouping, list/Kanban switch, and blocked-by links.
+- Optional effort, priority, dates, notes, subtasks, standalone tasks, epic grouping, list/Kanban switch, and blocked-by links.
 - Database rejects blocker cycles. Dependencies remain warnings.
-- Remaining UI limitation: epic move/edit and related-to link management are represented in the schema but do not yet have dedicated controls. Subtask detail editing requires opening it through a filtered/search result rather than its parent panel.
+- Epic editing, task management, atomic moves, and safe ungroup-on-trash behavior are available from each epic. Related-to link management remains deferred.
 
 ### 5. Goals and overview — substantially complete
 
