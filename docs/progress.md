@@ -11,6 +11,14 @@ Product feedback round one implemented:
 - UI polish pass improved hierarchy, spacing, controls, focus states, cards, modals, and responsive presentation.
 - Follow-up migration '20261009090008_product_feedback_round_one.sql' records the live schema changes and atomic epic functions.
 
+Product feedback round two implemented:
+
+- Removed horizontal overflow from the board sidebar.
+- Task details opened from epic management now stack above the epic dialog.
+- Save failures render as a fixed, app-level error toast above every dialog.
+- Goals can be edited, including their title, description, status, horizon, and custom dates.
+- The dashboard now shows a total and due-date-prioritized summary of unfinished top-level tasks across active boards.
+
 Latest update: added a Makefile for repeatable local setup, development, and combined lint/type/build verification. 'make test' intentionally aliases the available checks rather than introducing an automated test suite.
 
 Supabase key update: the client configuration now uses the current publishable key ('sb_publishable_...') rather than the legacy JWT-based 'anon' key. No secret key is required or accepted by the browser configuration.
@@ -62,7 +70,7 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 
 ### 5. Goals and overview — substantially complete
 
-- Explicitly achieved period goals, dashboard focus/first task/counts, task search filters, board archive review, restorable task/board Trash, and activity-based weekly completions.
+- Editable period goals, dashboard focus/first task/counts, an outstanding-work summary, task search filters, board archive review, restorable task/board Trash, and activity-based weekly completions.
 - Remaining UI limitation: task/epic goal-link management and board/folder rename/reorder controls are not yet exposed. The blocked dashboard count is a review prompt rather than a calculated count.
 
 ### 6. PWA and handoff — complete
