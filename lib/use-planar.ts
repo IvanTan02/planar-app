@@ -14,6 +14,7 @@ export function usePlanar(ownerId:string){
  async function insert<T>(table:string,row:Record<string,unknown>){const {data,error}=await db.from(table).insert({...row,owner_id:ownerId}).select().single();if(error)throw error;await load();return data as T}
  async function update(table:string,id:string,row:Record<string,unknown>){const {error}=await db.from(table).update(row).eq("id",id);if(error)throw error;await load()}
  async function remove(table:string,id:string){const {error}=await db.from(table).delete().eq("id",id);if(error)throw error;await load()}
+ async function rpc(name:string,args:Record<string,unknown>){const {error}=await db.rpc(name,args);if(error)throw error;await load()}
  async function savePlan(date:string,focus:string,ids:string[],version?:number){const {error}=await db.rpc("save_daily_plan",{p_date:date,p_focus:focus,p_task_ids:ids,p_expected_version:version??null});if(error)throw error;await load()}
- return{folders,boards,epics,tasks,goals,plans,activity,loading,error,setError,load,insert,update,remove,savePlan};
+ return{folders,boards,epics,tasks,goals,plans,activity,loading,error,setError,load,insert,update,remove,rpc,savePlan};
 }
