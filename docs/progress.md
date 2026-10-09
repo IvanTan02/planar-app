@@ -13,6 +13,8 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
+- Corrected goal editing so preset horizons update the displayed and persisted `start_date` and `end_date` fields, instead of adding unused `start`/`end` properties.
+
 - Removed horizontal overflow from the board sidebar.
 - Task details opened from epic management now stack above the epic dialog.
 - Save failures render as a fixed, app-level error toast above every dialog.
