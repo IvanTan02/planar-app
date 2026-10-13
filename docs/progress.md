@@ -13,9 +13,11 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
-- Expanded board list rows with issue-style status, priority, effort, and due date. Tasks now share one list instead of being split into epic sections; epic names appear as consistently colored chips beneath task titles and remain filterable/manageable. Board lists use custom menus for text, status, priority, effort, and epic filters plus manual, due-date, priority, effort, status, and title sorting.
+- Expanded board list rows with issue-style status, priority, effort, and due date. Tasks now share one list instead of being split into epic sections; epic names appear as consistently colored chips beneath task titles and remain filterable/manageable. Search remains prominent while status, priority, effort, and epic filters live in a responsive two-pane filter panel with active-filter badges. Task, status, priority, effort, and due columns sort directly from their headers with ascending/descending indicators.
 
-- Completed tasks now leave the detail dialog with success feedback, stay out of the active list, and appear in a collapsed per-board section ordered by latest completion. The section state is remembered, completions older than 30 days can be revealed on demand, and the Done filter provides a direct full-results view.
+- Completed tasks now leave the detail dialog with success feedback, stay out of the active list, and appear in a visually quieter collapsed per-board section ordered by latest completion. Active and completed sections show counts, the completed state is remembered, completions older than 30 days can be revealed on demand, and the Done filter provides a direct full-results view.
+
+- Replaced the global quick-capture field with a Create menu for tasks, epics, and boards. Each option opens its dedicated form with the relevant board, epic, or folder choices. A typography pass reduced heavy weights across navigation, controls, tables, filters, and task titles while preserving hierarchy for headings and primary actions.
 
 - Added sidebar organization controls for renaming and keyboard-accessible reordering of folders and boards. Boards can move between folders or remain at the top level without affecting their tasks or epics. Folder children are visibly indented and each folder can be expanded or collapsed.
 
