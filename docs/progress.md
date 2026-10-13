@@ -19,6 +19,8 @@ Product feedback round two implemented:
 
 - Replaced the global quick-capture field with a Create menu for tasks, epics, and boards. Each option opens its dedicated form with the relevant board, epic, or folder choices. A typography pass reduced heavy weights across navigation, controls, tables, filters, and task titles while preserving hierarchy for headings and primary actions.
 
+- Added a browser favicon using a compact Planar “P” mark and the product’s blue gradient. The SVG is exposed through Next.js app metadata and remains crisp at browser-tab sizes.
+
 - Added sidebar organization controls for renaming and keyboard-accessible reordering of folders and boards. Boards can move between folders or remain at the top level without affecting their tasks or epics. Folder children are visibly indented and each folder can be expanded or collapsed.
 
 - Simplified goal-link copy and due-date sublabels, with Saving/Saved feedback. Task saves now update only edited fields and close without a redundant database write after goal-only changes. Update failures preserve the database message and detect inaccessible/missing rows; authenticated edited-task saves still need browser verification.
