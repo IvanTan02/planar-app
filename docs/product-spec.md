@@ -90,13 +90,13 @@ Maintain a single plan per owner/date and a single item per plan/task. Dates are
 
 ### Navigation and capture
 
-Desktop sidebar lists folders, their boards, and unfiled boards. Mobile navigation offers equivalent access. Global entries: Dashboard, Today, Plan Tomorrow, Goals. Epics are accessible from boards; a separate index is optional.
+Desktop sidebar lists folders with their boards, while boards without a folder appear directly at the top level without a separate group heading. Mobile navigation offers equivalent access. Global entries: Dashboard, Today, Plan Tomorrow, Goals. Epics are accessible from boards; a separate index is optional.
 
 Quick capture requires only a title. In a board, use that board. Global capture uses the last valid selected board, falling back to the default. Provide a clear destination control. Extra fields are progressively disclosed. Task details open in a panel/dialog without losing the current view.
 
 ### Boards and folders
 
-Create, rename, reorder, move, and archive boards. Create, rename, reorder, and delete folders. Deleting a folder moves its boards to Unfiled; it never deletes them. Do not introduce a business cap on board count in v1.
+Create, rename, reorder, move, and archive boards. Create, rename, reorder, and delete folders. Deleting a folder returns its boards to the top level; it never deletes them. Do not introduce a business cap on board count in v1.
 
 Archived boards are excluded from active picking/navigation by default but remain accessible. If a board has unfinished items in current/future plans, show an explicit review before archiving. Preserve previous plans. Avoid hidden loss of planned work.
 

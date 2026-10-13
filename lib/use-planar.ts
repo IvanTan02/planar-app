@@ -16,9 +16,10 @@ export function usePlanar(ownerId:string){
  useEffect(()=>{void load()},[load]);
  async function insert<T>(table:string,row:Record<string,unknown>){const {data,error}=await db.from(table).insert({...row,owner_id:ownerId}).select().single();if(error)throw error;await load();return data as T}
  async function update(table:string,id:string,row:Record<string,unknown>){const {error}=await db.from(table).update(row).eq("id",id).select("id").single();if(error)throw mutationError(error);await load()}
+ async function reorder(table:"folders"|"boards",first:{id:string;position:number},second:{id:string;position:number}){const results=await Promise.all([db.from(table).update({position:second.position}).eq("id",first.id).select("id").single(),db.from(table).update({position:first.position}).eq("id",second.id).select("id").single()]);const failed=results.find(result=>result.error);if(failed?.error)throw mutationError(failed.error);await load()}
  async function remove(table:string,id:string){const {error}=await db.from(table).delete().eq("id",id);if(error)throw error;await load()}
  async function rpc(name:string,args:Record<string,unknown>){const {error}=await db.rpc(name,args);if(error)throw error;await load()}
  async function savePlan(date:string,focus:string,ids:string[],version?:number){const {error}=await db.rpc("save_daily_plan",{p_date:date,p_focus:focus,p_task_ids:ids,p_expected_version:version??null});if(error)throw error;await load()}
  async function setGoalLink(kind:"task"|"epic",entityId:string,goalId:string,linked:boolean){const table=kind==="task"?"goal_tasks":"goal_epics",column=kind==="task"?"task_id":"epic_id";const query=linked?db.from(table).upsert({owner_id:ownerId,goal_id:goalId,[column]:entityId},{onConflict:"goal_id,"+column}):db.from(table).delete().eq("goal_id",goalId).eq(column,entityId).eq("owner_id",ownerId);const {error}=await query;if(error)throw error;await load()}
- return{folders,boards,epics,tasks,goals,goalTasks,goalEpics,plans,activity,loading,error,setError,load,insert,update,remove,rpc,savePlan,setGoalLink};
+ return{folders,boards,epics,tasks,goals,goalTasks,goalEpics,plans,activity,loading,error,setError,load,insert,update,reorder,remove,rpc,savePlan,setGoalLink};
 }

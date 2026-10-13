@@ -13,6 +13,12 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
+- Expanded board list rows with issue-style status, priority, effort, and due date. Tasks now share one list instead of being split into epic sections; epic names appear as consistently colored chips beneath task titles and remain filterable/manageable. Board lists use custom menus for text, status, priority, effort, and epic filters plus manual, due-date, priority, effort, status, and title sorting.
+
+- Completed tasks now leave the detail dialog with success feedback, stay out of the active list, and appear in a collapsed per-board section ordered by latest completion. The section state is remembered, completions older than 30 days can be revealed on demand, and the Done filter provides a direct full-results view.
+
+- Added sidebar organization controls for renaming and keyboard-accessible reordering of folders and boards. Boards can move between folders or remain at the top level without affecting their tasks or epics. Folder children are visibly indented and each folder can be expanded or collapsed.
+
 - Simplified goal-link copy and due-date sublabels, with Saving/Saved feedback. Task saves now update only edited fields and close without a redundant database write after goal-only changes. Update failures preserve the database message and detect inaccessible/missing rows; authenticated edited-task saves still need browser verification.
 
 - Corrected goal-link checkbox sizing and row layout: checkboxes use compact 18px controls beside goal titles instead of inheriting full-width text-field styles.
@@ -81,7 +87,7 @@ Database readiness audit: corrected the initial profile RLS policy, restricted a
 ### 5. Goals and overview — substantially complete
 
 - Editable period goals, dashboard focus/first task/counts, an outstanding-work summary, task search filters, board archive review, restorable task/board Trash, and activity-based weekly completions.
-- Task/epic goal-link management is available. Remaining UI limitation: board/folder rename/reorder controls and dependency review are not yet exposed.
+- Task/epic goal-link management and board/folder organization controls are available. Remaining UI limitation: dependency review is not yet exposed.
 
 ### 6. PWA and handoff — complete
 
