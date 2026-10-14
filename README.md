@@ -9,10 +9,32 @@ Requirements: Node.js 20.19+, npm, and a Supabase project.
 1. Install packages with 'npm install'.
 2. Copy '.env.example' to '.env.local' and add the project URL and publishable key ('sb_publishable_...') from Supabase's Connect dialog.
 3. In Supabase, apply 'supabase/migrations/202610080001_initial_schema.sql'.
-4. Create the private owner in Authentication → Users. Public sign-up is intentionally absent. The database trigger creates the profile and initial board.
+4. For restricted development, create the permitted user in Authentication → Users and place its UUID in `PLANAR_ALLOWED_USER_IDS`. The database trigger creates the profile and initial board.
 5. Run 'make dev' and open http://localhost:3000.
 
 Without environment variables, Planar deliberately shows a setup screen. It does not simulate successful persistence.
+
+## Environment access
+
+Development and preview deployments should use dedicated Supabase Auth users and set `PLANAR_ALLOWED_USER_IDS` to their UUIDs. When this allowlist is present, every other account is rejected after authentication. Create additional development accounts through Supabase Authentication → Users and append their UUIDs as a comma-separated list.
+
+Self-service registration is controlled independently with `PLANAR_SIGNUP_ENABLED`. Keep it `false` for local and preview deployments. For production, set it to `true`, leave `PLANAR_ALLOWED_USER_IDS` unset, and copy every development UUID into `PLANAR_BLOCKED_USER_IDS`. This prevents development identities from signing into the production app even though both deployments share one Supabase Auth project. A UUID cannot appear in both lists.
+
+```env
+# Development / preview
+PLANAR_SIGNUP_ENABLED=false
+PLANAR_ALLOWED_USER_IDS=<dev-user-uuid>,<another-dev-user-uuid>
+PLANAR_BLOCKED_USER_IDS=
+
+# Production
+PLANAR_SIGNUP_ENABLED=true
+PLANAR_ALLOWED_USER_IDS=
+PLANAR_BLOCKED_USER_IDS=<dev-user-uuid>,<another-dev-user-uuid>
+```
+
+Both modes use the same tables. RLS separates rows by the authenticated user's `owner_id`; the deployment access lists determine which identities may enter each app deployment.
+
+Set `NEXT_PUBLIC_SITE_URL` to the exact deployment origin so confirmation emails return to `/auth/callback`. Configure the same production, preview, and localhost URLs in Supabase Auth URL Configuration. The signup switch and user access lists are server-only; never prefix them with `NEXT_PUBLIC_`.
 
 ## Commands
 

@@ -7,7 +7,8 @@ The UI is organized around one responsive workspace because the product is a coh
 ## Provisional decisions
 
 - Next.js App Router and TypeScript.
-- Supabase email/password auth with no public sign-up route.
+- Supabase email/password auth with deployment-controlled public signup.
+- Capability-based deployment access: local and preview environments disable signup and restrict login to administrator-provisioned Auth UUIDs; production can enable self-service signup while explicitly blocking those development UUIDs, without a generic environment flag.
 - Direct authenticated Supabase client access protected by RLS.
 - Fixed task states: Todo, In progress, Done.
 - Single folder level and single subtask level.

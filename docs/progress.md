@@ -13,6 +13,8 @@ Product feedback round one implemented:
 
 Product feedback round two implemented:
 
+- Added capability-based development/production data separation for the shared Supabase project. Deployments can restrict authentication to an administrator-managed UUID allowlist, explicitly block development UUIDs from production, and independently enable public email signup. Access-list conflicts are rejected; restricted deployments reject unapproved sessions on login, callback, and protected-page access. Public signup uses email confirmation and the existing per-user provisioning/RLS model.
+
 - Expanded board list rows with issue-style status, priority, effort, and due date. Tasks now share one list instead of being split into epic sections; epic names appear as consistently colored chips beneath task titles and remain filterable/manageable. Search remains prominent while status, priority, effort, and epic filters live in a responsive two-pane filter panel with active-filter badges. Task, status, priority, effort, and due columns sort directly from their headers with ascending/descending indicators.
 
 - Completed tasks now leave the detail dialog with success feedback, stay out of the active list, and appear in a visually quieter collapsed per-board section ordered by latest completion. Active and completed sections show counts, the completed state is remembered, completions older than 30 days can be revealed on demand, and the Done filter provides a direct full-results view.

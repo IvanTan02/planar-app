@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { accessPolicy } from "@/lib/access";
 
 export async function login(formData: FormData) {
   const email = formData.get("email");
@@ -27,6 +28,14 @@ export async function login(formData: FormData) {
     redirect(
       "/login?error=" +
         encodeURIComponent("Supabase accepted the login but returned no session."),
+    );
+  }
+
+  if (!data.user || !accessPolicy().allows(data.user.id)) {
+    await supabase.auth.signOut();
+    redirect(
+      "/login?error=" +
+        encodeURIComponent("This account is not allowed to access this deployment."),
     );
   }
 

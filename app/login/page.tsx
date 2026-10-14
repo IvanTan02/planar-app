@@ -1,11 +1,12 @@
 import { LoginForm } from "@/components/login-form";
+import { accessPolicy } from "@/lib/access";
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, message } = await searchParams;
 
-  return <main className="auth-page"><section className="auth-copy"><div className="brand-mark">P</div><p className="eyebrow">Welcome to Planar</p><h1>Make tomorrow feel lighter.</h1><p>Collect the work, choose what matters, and start your day with a clear first step.</p></section><LoginForm error={error} /></main>
+  return <main className="auth-page"><section className="auth-copy"><div className="brand-mark">P</div><p className="eyebrow">Welcome to Planar</p><h1>Make tomorrow feel lighter.</h1><p>Collect the work, choose what matters, and start your day with a clear first step.</p></section><LoginForm error={error} message={message} signupEnabled={accessPolicy().signupEnabled}/></main>
 }

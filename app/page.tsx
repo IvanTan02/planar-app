@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { PlanarApp } from "@/components/planar-app";
+import { accessPolicy } from "@/lib/access";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,13 @@ export default async function Home() {
   if (!claims?.sub) {
     const reason = error?.message ?? "Your session could not be verified.";
     redirect("/login?error=" + encodeURIComponent(reason));
+  }
+  if (!accessPolicy().allows(claims.sub)) {
+    await supabase.auth.signOut();
+    redirect(
+      "/login?error=" +
+        encodeURIComponent("This account is not allowed to access this deployment."),
+    );
   }
   const email = typeof claims.email === "string" ? claims.email : "Owner";
   return <PlanarApp userId={claims.sub} email={email} />;
