@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { PlanarApp } from "@/components/planar-app";
 import { accessPolicy } from "@/lib/access";
+import { isAuthSessionMissingError } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,8 @@ export default async function Home() {
   const { data, error } = await supabase.auth.getClaims();
   const claims = data?.claims;
   if (!claims?.sub) {
-    const reason = error?.message ?? "Your session could not be verified.";
+    if (!error || isAuthSessionMissingError(error)) redirect("/login");
+    const reason = error.message;
     redirect("/login?error=" + encodeURIComponent(reason));
   }
   if (!accessPolicy().allows(claims.sub)) {

@@ -1,4 +1,18 @@
+"use client";
+
 import { login } from "@/app/login/actions";
+import { useFormStatus } from "react-dom";
+
+function SignInButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button className="button auth-submit" type="submit" disabled={pending}>
+      {pending && <span className="button-spinner" aria-hidden="true" />}
+      {pending ? "Signing in…" : "Sign in"}
+    </button>
+  );
+}
 
 export function LoginForm({ error, message, signupEnabled }: { error?: string; message?: string; signupEnabled: boolean }) {
   return (
@@ -24,7 +38,7 @@ export function LoginForm({ error, message, signupEnabled }: { error?: string; m
         </p>
       )}
       {message && <p className="auth-message" role="status">{message}</p>}
-      <button className="button">Sign in</button>
+      <SignInButton />
       {signupEnabled && <a className="auth-link" href="/signup">New to Planar? Create an account</a>}
     </form>
   );
